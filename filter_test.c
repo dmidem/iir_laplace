@@ -1,15 +1,21 @@
 #include <stdio.h>
+#include <math.h>
 
 #include "filter.h"
 #include "dumper.h"
 
+double f(const double t)
+{
+    return sin(t) * sin(t * 0.1);
+}
+
 int main()
 {
     double snum[] = { 1 };
-    double sden[] = { 1, 1 };
+    double sden[] = { 1 };
 
-    double dT = 0.01;
-    int L = 1;
+    double dT = 0.1;
+    int L = 10;
     double tmax = 0.2;
 
     int nsnum = sizeof(snum) / sizeof(snum[0]);
@@ -23,9 +29,13 @@ int main()
     print_polynom_nd(iir->b, iir->m + 1, iir->a, iir->n + 1, 'z', "IIR H(z)");
 
     printf("t\tx\ty\n");
-    double t, x, y;
+    double t, x = 0, y;
+    int l = 0;
     for (t = 0; t < tmax; t += dt) {
-	x = 1;
+	if (--l <= 0) {
+	    x = f(t);
+	    l = L;
+	}
 	y = iir_filter_next(iir, x);
 	printf("%f\t%f\t%f\n", t, x, y);
     }

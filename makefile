@@ -5,7 +5,7 @@ EXE=filter_test
 CC=gcc
 CFLAGS=-Wall -O3
 #LDFLAGS=-static-libgcc -static-libstdc++ -static
-LDFLAGS=
+LDFLAGS=-lm
 RM=rm
 
 all: $(EXE)
