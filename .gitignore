@@ -1,0 +1,4 @@
+backup/
+*.o
+.depend
+filter_test
