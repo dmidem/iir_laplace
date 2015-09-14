@@ -1,0 +1,28 @@
+SRC=polynom_test.c polynom.c dumper.c
+OBJ=$(SRC:.c=.o)
+EXE=polynom_test
+
+CC=gcc
+CFLAGS=-Wall -O3 -std=c99
+#LDFLAGS=-static-libgcc -static-libstdc++ -static
+LDFLAGS=-lm
+RM=rm
+
+all: $(EXE)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+$(EXE): $(OBJ)
+	$(CC) $(OBJ) $(LDFLAGS) -o $@
+
+clean:
+	$(RM) $(OBJ) $(EXE)
+
+depend: $(SRCS)
+	rm -f ./.depend
+	$(CC) $(CFLAGS) -MM $(SRC) >> ./.depend
+
+-include .depend
+
+.PHONY: all clean

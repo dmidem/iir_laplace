@@ -2,3 +2,4 @@ backup/
 *.o
 .depend
 filter_test
+polynom_test

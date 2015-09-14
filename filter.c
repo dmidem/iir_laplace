@@ -1,7 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "polynom.h"
 #include "filter.h"
 
 
@@ -48,7 +47,8 @@ void bilinear_transform_n(const double *s, const int ns, const double t, double 
 }
 
 
-int bilinear_transform_nd(const double *snum, const int nsnum, const double *sden, const int nsden, const double t, double *znum, double *zden)
+int bilinear_transform_nd(const double *snum, const int nsnum, const double *sden, const int nsden,
+    const double t, double *znum, double *zden)
 {
     double znumnum[nsnum], znumden[nsnum], zdennum[nsden], zdenden[nsden];
     int nz = (nsnum > nsden ? nsnum : nsden);
@@ -61,10 +61,8 @@ int bilinear_transform_nd(const double *snum, const int nsnum, const double *sde
     bilinear_transform_n(sden, nsden, t, zdennum, zdenden);
 
 /*
-    printf("zn:\n");
-    print_polynom_nd(znumnum, nsnum, znumden, nsnum, 'z');
-    printf("zd:\n");
-    print_polynom_nd(zdennum, nsden, zdenden, nsden, 'z');
+    print_polynom_nd(znumnum, nsnum, znumden, nsnum, 'z', "zn");
+    print_polynom_nd(zdennum, nsden, zdenden, nsden, 'z', "zd");
 */
 
     clear_polynom(znumden, nsnum);
@@ -162,7 +160,9 @@ double iir_filter_next(IIR_FILTER *iir, const double x)
 }
 
 
-IIR_FILTER *laplace_nd_filter(const double *num, const int nnum, const double *den, const int nden, const double dt, const int L)
+IIR_FILTER *laplace_nd_filter(const double *num, const int nnum,
+    const double *den, const int nden,
+    const double dt, const int L)
 {
     double interp_znum[] = { 0.0221824, -0.0134342, -0.0134342, 0.0221824 };
     int ninterp_znum = sizeof(interp_znum) / sizeof(interp_znum[0]);
@@ -198,7 +198,25 @@ IIR_FILTER *laplace_nd_filter(const double *num, const int nnum, const double *d
 }
 
 
-IIR_FILTER *laplace_zp_filter(const double *num[2], const int nnum, const double *den[2], const int nden, const double dt, const int L)
+IIR_FILTER *laplace_zp_filter(const complex *zlc, const int nzlc,
+    const complex *plc, const int nplc,
+    const complex zkc, const double dt, const int L)
 {
-    return NULL;
+    int nnum = nzlc + 1;
+    complex num_c[nnum];
+    double num[nnum];
+
+    complex pkc = { 1, 0 };
+    int nden = nplc + 1;
+    complex den_c[nden];
+    double den[nden];
+
+    expand_zerolist_c(zlc, nzlc, zkc, num_c);
+    copy_polynom_cr(num_c, nnum, num);
+    expand_zerolist_c(plc, nplc, pkc, den_c);
+    copy_polynom_cr(den_c, nden, den);
+
+    //print_polynom_nd(num, nnum, den, nden, 's', "zp nd");
+
+    return laplace_nd_filter(num, nnum, den, nden, dt, L);
 }
