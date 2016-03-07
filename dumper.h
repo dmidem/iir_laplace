@@ -1,3 +1,7 @@
+/*
+    Routines to print polynoms and filter transform functions (used for testing purposes).
+*/
+
 #ifndef DUMPER_H
 #define DUMPER_H
 

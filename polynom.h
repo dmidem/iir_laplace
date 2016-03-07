@@ -1,3 +1,7 @@
+/*
+    Mini-library of functions to operate polynoms.
+*/
+
 #ifndef POLYNOM_H
 #define POLYNOM_H
 

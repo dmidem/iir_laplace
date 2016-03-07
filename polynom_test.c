@@ -1,3 +1,7 @@
+/*
+    Main module for polynom operations testing.
+*/
+
 #include <stdio.h>
 
 #include "polynom.h"

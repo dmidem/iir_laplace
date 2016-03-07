@@ -1,3 +1,7 @@
+/*
+    Main module for filter testing.
+*/
+
 #include <stdio.h>
 #include <math.h>
 

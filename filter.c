@@ -3,6 +3,10 @@
 
 #include "filter.h"
 
+#ifdef DEBUG_DUMP
+#include "dumper.h"
+#endif
+
 
 void bilinear_transform_n(const double *s, const int ns, const double t, double *znum, double *zden)
 {
@@ -60,10 +64,10 @@ int bilinear_transform_nd(const double *snum, const int nsnum, const double *sde
     bilinear_transform_n(snum, nsnum, t, znumnum, znumden);
     bilinear_transform_n(sden, nsden, t, zdennum, zdenden);
 
-/*
+#ifdef DEBUG_DUMP
     print_polynom_nd(znumnum, nsnum, znumden, nsnum, 'z', "zn");
     print_polynom_nd(zdennum, nsden, zdenden, nsden, 'z', "zd");
-*/
+#endif // DEBUG_DUMP
 
     clear_polynom(znumden, nsnum);
     clear_polynom(zdenden, nsden);
@@ -216,7 +220,9 @@ IIR_FILTER *laplace_zp_filter(const complex *zlc, const int nzlc,
     expand_zerolist_c(plc, nplc, pkc, den_c);
     copy_polynom_cr(den_c, nden, den);
 
-    //print_polynom_nd(num, nnum, den, nden, 's', "zp nd");
+#ifdef DEBUG_DUMP
+    print_polynom_nd(num, nnum, den, nden, 's', "zp nd");
+#endif // DEBUG_DUMP
 
     return laplace_nd_filter(num, nnum, den, nden, dt, L);
 }

@@ -1,1 +1,1 @@
-IIR filter using Laplace transform
+Implementation of IIR-filter for given Laplace transform.
